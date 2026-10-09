@@ -1,0 +1,481 @@
+/* RigExec for Unreal: the Squarebit look on MkDocs Material.
+ *
+ * Calm and precise: the product's own screenshots carry the page, the
+ * chrome stays quiet. Squarebit cyan is the one accent; Syne for display
+ * type, DM Sans for text, DM Mono for code -- the squarebitstudios.com set.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap");
+
+/* -- Tokens --------------------------------------------------------------- */
+
+:root {
+  --sb-cyan: #0ea5c9;
+  --sb-cyan-bright: #5de1ff;
+  --sb-cyan-deep: #076b8a;
+  --sb-ink: #0f172a;
+  --sb-ink-2: #374151;
+  --sb-muted: #6b7280;
+  --sb-surface: #ffffff;
+  --sb-surface-2: #f1f5f9;
+  --sb-border: #e2e8f0;
+  --sb-glow: rgba(14, 165, 201, 0.18);
+  --sb-radius: 14px;
+  --sb-display: "Syne", "DM Sans", sans-serif;
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--sb-ink);
+  --md-primary-fg-color--light: #1e293b;
+  --md-primary-fg-color--dark: #020617;
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: var(--sb-cyan);
+  --md-accent-fg-color--transparent: rgba(14, 165, 201, 0.1);
+  --md-typeset-a-color: #0891b2;
+  --md-default-bg-color: #f8fcff;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 195;
+  --sb-ink: #e8eef2;
+  --sb-ink-2: #c3ccd3;
+  --sb-muted: #8a959d;
+  --sb-surface: #232627;
+  --sb-surface-2: #1a1c1c;
+  --sb-border: #33383a;
+  --sb-glow: rgba(43, 189, 214, 0.22);
+  --md-default-bg-color: #1d1f1f;
+  --md-default-bg-color--light: #232627;
+  --md-primary-fg-color: #151717;
+  --md-primary-fg-color--light: #1d1f1f;
+  --md-primary-fg-color--dark: #0f1111;
+  --md-accent-fg-color: #2bbdd6;
+  --md-accent-fg-color--transparent: rgba(43, 189, 214, 0.12);
+  --md-typeset-a-color: #22d3ee;
+  --md-code-bg-color: #262a2b;
+  --md-footer-bg-color: #151717;
+  --md-footer-bg-color--dark: #0f1111;
+}
+
+/* -- Type ----------------------------------------------------------------- */
+
+.md-header__title,
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-family: var(--sb-display);
+  letter-spacing: -0.015em;
+}
+
+.md-typeset h1 {
+  font-weight: 800;
+  color: var(--sb-ink);
+}
+
+.md-typeset h2 {
+  font-weight: 700;
+  margin-top: 2.2em;
+}
+
+.md-typeset h3 {
+  font-weight: 700;
+}
+
+.md-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+.md-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover {
+  color: var(--sb-cyan-bright);
+}
+
+.md-header__button.md-logo img {
+  height: 1.5rem;
+}
+
+/* -- Content polish ------------------------------------------------------- */
+
+.md-typeset table:not([class]) {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--sb-border);
+  box-shadow: none;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.md-typeset code {
+  border-radius: 6px;
+}
+
+.md-typeset pre > code {
+  border-radius: 10px;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 10px;
+}
+
+.md-typeset img {
+  border-radius: 10px;
+}
+
+/* -- Buttons -------------------------------------------------------------- */
+
+.md-typeset .md-button {
+  border-radius: 999px;
+  padding: 0.6em 1.5em;
+  font-weight: 600;
+  border-width: 1.5px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.md-typeset .md-button--primary {
+  background: linear-gradient(135deg, var(--sb-cyan-bright), var(--sb-cyan));
+  border-color: transparent;
+  color: #04212b;
+}
+
+.md-typeset .md-button--primary:hover,
+.md-typeset .md-button--primary:focus {
+  color: #04212b;
+  box-shadow: 0 8px 24px var(--sb-glow);
+  transform: translateY(-1px);
+}
+
+.md-typeset .md-button:not(.md-button--primary) {
+  color: var(--sb-ink);
+  border-color: var(--sb-border);
+}
+
+.md-typeset .md-button:not(.md-button--primary):hover {
+  border-color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+  background: transparent;
+}
+
+/* -- Landing page --------------------------------------------------------- */
+
+.sb-home .md-content__inner > h1:first-child {
+  display: none;
+}
+
+.sb-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding: 1.5rem 0 1rem;
+}
+
+.sb-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--md-accent-fg-color);
+  background: var(--md-accent-fg-color--transparent);
+  border: 1px solid var(--md-accent-fg-color--transparent);
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  margin-bottom: 1rem;
+}
+
+.md-typeset .sb-hero h1.sb-title {
+  display: block;
+  font-size: 2.05rem;
+  line-height: 1.12;
+  margin: 0 0 1rem;
+}
+
+.sb-gradient {
+  background: linear-gradient(100deg, var(--sb-cyan-bright), var(--sb-cyan) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sb-lede {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--sb-ink-2);
+  margin-bottom: 1.6rem;
+}
+
+.sb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.sb-actions .md-button {
+  margin: 0;
+}
+
+.sb-shot {
+  position: relative;
+  margin: 0;
+}
+
+.sb-shot::before {
+  content: "";
+  position: absolute;
+  inset: 8% 6% -6%;
+  background: radial-gradient(closest-side, var(--sb-glow), transparent);
+  filter: blur(24px);
+  z-index: 0;
+}
+
+.md-typeset .sb-shot img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  border-radius: var(--sb-radius);
+  border: 1px solid var(--sb-border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.sb-shot figcaption {
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  color: var(--sb-muted);
+  margin-top: 0.6rem;
+}
+
+.sb-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.6rem;
+  margin: 2rem 0 0.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--sb-border);
+  border-bottom: 1px solid var(--sb-border);
+  font-size: 0.8rem;
+  color: var(--sb-muted);
+}
+
+.sb-strip span + span::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--md-accent-fg-color);
+  margin-right: 1.6rem;
+  vertical-align: middle;
+}
+
+.sb-strip strong {
+  color: var(--sb-ink);
+  font-weight: 600;
+}
+
+.md-typeset .sb-section-title {
+  color: var(--sb-ink);
+  text-align: center;
+  margin: 3rem 0 0.4rem;
+}
+
+.sb-section-lede {
+  text-align: center;
+  color: var(--sb-muted);
+  max-width: 38rem;
+  margin: 0 auto 1.6rem;
+}
+
+/* Feature cards. */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border-radius: var(--sb-radius);
+  border: 1px solid var(--sb-border);
+  background: var(--sb-surface);
+  padding: 1.1rem 1.2rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px var(--sb-glow);
+}
+
+.md-typeset .grid.cards .twemoji {
+  color: var(--md-accent-fg-color);
+}
+
+.md-typeset .grid.cards > ul > li > hr {
+  margin: 0.6rem 0;
+  border-color: var(--sb-border);
+}
+
+/* Feature rows: screenshot beside its story, alternating sides. */
+.sb-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 2.2rem;
+  align-items: center;
+  margin: 2.4rem 0;
+}
+
+.sb-feature--flip {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+
+.sb-feature--flip .sb-shot {
+  order: 2;
+}
+
+.md-typeset .sb-feature h3 {
+  margin-top: 0;
+  font-size: 1.35rem;
+}
+
+.sb-feature p {
+  color: var(--sb-ink-2);
+}
+
+.sb-kicker {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--md-accent-fg-color);
+}
+
+/* How it works. */
+.sb-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  counter-reset: step;
+}
+
+.sb-step {
+  border-radius: var(--sb-radius);
+  border: 1px solid var(--sb-border);
+  background: var(--sb-surface);
+  padding: 1.1rem 1.2rem;
+}
+
+.sb-step::before {
+  counter-increment: step;
+  content: counter(step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  font-family: var(--sb-display);
+  font-weight: 700;
+  color: #04212b;
+  background: linear-gradient(135deg, var(--sb-cyan-bright), var(--sb-cyan));
+  margin-bottom: 0.6rem;
+}
+
+.md-typeset .sb-step h4 {
+  margin: 0 0 0.3rem;
+  font-family: var(--sb-display);
+  font-size: 1rem;
+}
+
+.sb-step p {
+  margin: 0;
+  color: var(--sb-ink-2);
+  font-size: 0.8rem;
+}
+
+/* The Squarebit Subdivs band. */
+.sb-band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin: 3rem 0 1rem;
+  padding: 1.6rem 1.8rem;
+  border-radius: var(--sb-radius);
+  border: 1px solid var(--md-accent-fg-color--transparent);
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--md-accent-fg-color--transparent), transparent 60%),
+    var(--sb-surface);
+}
+
+.md-typeset .sb-band h3 {
+  margin: 0 0 0.3rem;
+}
+
+.sb-band p {
+  margin: 0;
+  color: var(--sb-ink-2);
+  max-width: 34rem;
+}
+
+/* Get started. */
+.sb-cta {
+  text-align: center;
+  margin: 3.5rem 0 1rem;
+}
+
+.md-typeset .sb-cta h2 {
+  margin: 0 0 0.4rem;
+}
+
+.sb-cta p {
+  color: var(--sb-muted);
+  margin: 0 0 1.4rem;
+}
+
+.sb-cta .sb-actions {
+  justify-content: center;
+}
+
+/* -- Small screens -------------------------------------------------------- */
+
+@media screen and (max-width: 60em) {
+  .sb-hero,
+  .sb-feature,
+  .sb-feature--flip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+  }
+
+  .sb-feature--flip .sb-shot {
+    order: 0;
+  }
+
+  .md-typeset .sb-hero h1.sb-title {
+    font-size: 1.75rem;
+  }
+
+  .sb-strip span + span::before {
+    display: none;
+  }
+
+  .sb-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .md-button,
+  .md-typeset .grid.cards > ul > li {
+    transition: none;
+  }
+}
+
+/* Code in table cells stays on one line (asset and file names). */
+.md-typeset table:not([class]) code {
+  white-space: nowrap;
+}
