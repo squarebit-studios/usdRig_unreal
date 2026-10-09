@@ -1,0 +1,94 @@
+// Normals and tangents for a RigExec skin, from the posed positions, on the GPU.
+//
+// One thread per render vertex. The normal is the area-weighted sum of the
+// face normals of every triangle around the vertex's POINT, so it is smooth
+// across UV seams (a point split for its UVs gets the same normal on both
+// sides). The tangent is the UV gradient summed over the triangles that use
+// this render vertex itself -- its own UV island -- orthogonalized against
+// the normal, with the bitangent's handedness as the sign.
+//
+// Output is Unreal's high-precision tangent basis: two 16-bit SNORM float4s
+// per vertex (TangentX, TangentZ with the sign in W), four uints, copied into
+// the vertex factory's tangent buffer.
+
+#include "/Engine/Public/Platform.ush"
+
+Buffer<float> Positions;      // 3 floats per render vertex, component space
+Buffer<float2> UVs;           // UV0 per render vertex
+Buffer<uint> Indices;         // 3 render vertex ids per triangle
+Buffer<uint> TriOffsets;      // per render vertex: [TriOffsets[r], TriOffsets[r + 1]) in Tris
+Buffer<uint> Tris;            // triangles around each render vertex's point
+RWBuffer<uint> OutTangents;   // 4 uints per render vertex
+uint NumVertices;
+
+float3 Position(uint V)
+{
+	return float3(Positions[V * 3 + 0], Positions[V * 3 + 1], Positions[V * 3 + 2]);
+}
+
+uint PackPair(float A, float B)
+{
+	const int IA = (int)round(clamp(A, -1.0f, 1.0f) * 32767.0f);
+	const int IB = (int)round(clamp(B, -1.0f, 1.0f) * 32767.0f);
+	return ((uint)IA & 0xFFFFu) | (((uint)IB & 0xFFFFu) << 16);
+}
+
+[numthreads(64, 1, 1)]
+void MainCS(uint3 DispatchThreadId : SV_DispatchThreadID)
+{
+	const uint R = DispatchThreadId.x;
+	if (R >= NumVertices)
+	{
+		return;
+	}
+
+	float3 N = 0;
+	float3 T = 0;
+	float3 B = 0;
+	for (uint I = TriOffsets[R]; I < TriOffsets[R + 1]; ++I)
+	{
+		const uint Tri = Tris[I];
+		const uint A = Indices[Tri * 3 + 0];
+		const uint Bv = Indices[Tri * 3 + 1];
+		const uint C = Indices[Tri * 3 + 2];
+		const float3 PA = Position(A);
+		const float3 E1 = Position(Bv) - PA;
+		const float3 E2 = Position(C) - PA;
+		// Area weighted, in Unreal's winding: its coordinate system is
+		// left-handed, so the face normal is E2 x E1 (GeometryCore's
+		// VectorUtil::Normal reverses the product the same way).
+		N += cross(E2, E1);
+
+		if (A == R || Bv == R || C == R)
+		{
+			const float2 UA = UVs[A];
+			const float2 D1 = UVs[Bv] - UA;
+			const float2 D2 = UVs[C] - UA;
+			const float Det = D1.x * D2.y - D2.x * D1.y;
+			if (abs(Det) > 1e-20f)
+			{
+				const float S = 1.0f / Det;
+				T += (E1 * D2.y - E2 * D1.y) * S;
+				B += (E2 * D1.x - E1 * D2.x) * S;
+			}
+		}
+	}
+
+	const float NLength = length(N);
+	N = NLength > 1e-20f ? N / NLength : float3(0, 0, 1);
+	T -= N * dot(N, T);
+	float TLength = length(T);
+	if (TLength <= 1e-20f)
+	{
+		// No usable UVs here: any tangent perpendicular to the normal.
+		T = abs(N.z) < 0.9f ? cross(N, float3(0, 0, 1)) : cross(N, float3(1, 0, 0));
+		TLength = length(T);
+	}
+	T /= TLength;
+	const float Sign = dot(cross(N, T), B) < 0.0f ? -1.0f : 1.0f;
+
+	OutTangents[R * 4 + 0] = PackPair(T.x, T.y);
+	OutTangents[R * 4 + 1] = PackPair(T.z, 0.0f);
+	OutTangents[R * 4 + 2] = PackPair(N.x, N.y);
+	OutTangents[R * 4 + 3] = PackPair(N.z, Sign);
+}

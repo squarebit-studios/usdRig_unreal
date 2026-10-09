@@ -1,0 +1,11 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.8",
+	"Description": "The RigExec biped in Unreal: the rig posed by the RigExec runtime, animated with Control Rig and Sequencer.",
+	"Plugins": [
+		{ "Name": "RigExec", "Enabled": true },
+		{ "Name": "PythonScriptPlugin", "Enabled": true },
+		{ "Name": "ControlRig", "Enabled": true },
+		{ "Name": "USDCore", "Enabled": true }
+	]
+}

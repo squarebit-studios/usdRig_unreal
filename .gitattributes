@@ -1,0 +1,18 @@
+* text=auto
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.sh   text eol=lf
+*.cpp  text
+*.h    text
+*.cs   text
+*.py   text
+*.json text
+*.ini  text
+*.md   text
+# Binary: the vendored runtime, the rig data and Unreal assets.
+*.lib     binary
+*.dll     binary
+*.pdb     binary
+*.rigexec binary
+*.uasset  binary
+*.umap    binary

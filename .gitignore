@@ -1,0 +1,18 @@
+# Unreal build output.
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+*.sln
+.vs/
+# The packaged plugin (build_plugin.bat) and its install in the example.
+/Build/
+/Examples/RigExecBiped/Plugins/
+# Written by the editor on first open.
+/Examples/RigExecBiped/Config/DefaultEditor.ini
+/Examples/RigExecBiped/Config/DefaultInput.ini
+/Examples/RigExecBiped/Content/Collections/
+/Examples/RigExecBiped/Content/Developers/
+# Python.
+__pycache__/
+*.pyc

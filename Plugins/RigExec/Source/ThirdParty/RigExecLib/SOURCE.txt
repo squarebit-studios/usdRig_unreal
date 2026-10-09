@@ -1,0 +1,29 @@
+usdRig commit: 4f72b166fa73e0b714f690c8c907fed7795744ef
+uncommitted changes under libs/ when copied:
+   M libs/rigExecBinary/container.h
+   M libs/rigExecBinary/pose.cpp
+   M libs/rigExecBinary/pose.h
+   M libs/rigExecMath/autoClavicleKernel.h
+   M libs/rigExecMath/solvers.cpp
+   M libs/rigExecMath/solvers.h
+   M libs/rigExecRuntime/open.cpp
+   M libs/rigExecRuntime/poseInternal.h
+   M libs/rigExecRuntime/poseSolvers.cpp
+   M libs/rigExecRuntime/poseSteps.cpp
+   M libs/rigExecRuntime/store.h
+  ?? libs/rigExecMath/limbStretchKernel.h
+headers:
+  rigExecBinary/container.h
+  rigExecBinary/external.h
+  rigExecBinary/geometry.h
+  rigExecBinary/inputTable.h
+  rigExecBinary/pose.h
+  rigExecBinary/program.h
+  rigExecBinary/propertyChains.h
+  rigExecMath/autoClavicleKernel.h
+  rigExecMath/limbStretchKernel.h
+  rigExecRuntime/runtime.h
+  rigExecRuntime/runtimeMath.h
+  rigExecRuntime/store.h
+  rigExecRuntime/values.h
+libraries (lib/Win64): rigExecRuntime.lib, rigExecBinary.lib
