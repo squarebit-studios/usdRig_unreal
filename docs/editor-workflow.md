@@ -307,6 +307,23 @@ surface material `/RigExec/M_RigExecSurface` (made by
 A `SurfaceMaterial` of your own must
 blend the vertex colour in the same way for the highlight to show.
 
+## Subdivision with Squarebit Subdivs
+
+RigExec works with [Squarebit Subdivs](https://www.squarebitstudios.com/squarebit-subdivs), which draws a mesh as a
+Catmull-Clark subdivision surface on the GPU. With it installed in your project:
+
+1. Select the RigExec actor.
+2. **Add Component → Squarebit Subdiv Dynamic Mesh Component**.
+3. Set **Subdivision Level** (1 is the usual choice).
+
+The component gathers the character's meshes, hides them, and draws them
+subdivided, following every pose live. Touch Pose, the pickers, the marking
+menu, Sequencer and undo work as before, and Touch Pose highlights keep hard
+edges on the subdivided surface.
+
+Squarebit Subdivs is optional and isn't part of this repository: RigExec runs
+without it. See the [Squarebit Subdivs site](https://www.squarebitstudios.com/squarebit-subdivs) for how to get it.
+
 ## Scripting and testing
 
 `URigExecRuntimeLibrary::RigExecSelfTest(file, channel, values)` opens a

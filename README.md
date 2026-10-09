@@ -32,7 +32,7 @@ control re-poses the rig and deforms the meshes in place.
 | `Tools/make_materials.py` | Regenerates the plugin's surface material (`M_RigExecSurface`) |
 | `Tools/update_rigexec_lib.py` | Refreshes the vendored runtime from a built usdRig checkout |
 | `build_plugin.bat` | Packages the plugin with Unreal's automation tool and installs it into the example project |
-| `build_subdivs.bat` | Packages `../SquarebitSubdivs` and installs it into the example project (GPU subdivision) |
+| `build_subdivs.bat` | For local testing with [Squarebit Subdivs](https://www.squarebitstudios.com/squarebit-subdivs): packages `../SquarebitSubdivs` into the example project |
 | `prepare_biped.bat` | Rebuilds the example's rig data from usdRig's biped |
 | `docs/` | Full documentation (see below) |
 

@@ -48,6 +48,12 @@ and deforms the meshes in place, on the GPU.
     Keys go on a Control Rig track like any other rig. Undo and redo bring the rig back exactly, and IK/FK and
     space switches keep the limb where it is.
 
+- **Works with Squarebit Subdivs**
+
+    Add [Squarebit Subdivs](https://www.squarebitstudios.com/squarebit-subdivs) and the character draws as a subdivision surface on the GPU,
+    with Touch Pose, the pickers, Sequencer and undo working as before. It's optional: RigExec doesn't need it.
+    See [Subdivision](editor-workflow.md#subdivision-with-squarebit-subdivs).
+
 </div>
 
 ## Quick start
@@ -88,6 +94,7 @@ In the editor:
 | Build the plugin, or refresh the vendored runtime | [Building and installing](building.md) |
 | Get a usdRig character ready for Unreal | [Preparing a rig](rig-preparation.md) |
 | Use the pickers, Touch Pose, the marking menu, Sequencer, IK/FK and spaces | [Working in the editor](editor-workflow.md) |
+| Draw the character as a subdivision surface | [Subdivision](editor-workflow.md#subdivision-with-squarebit-subdivs), with [Squarebit Subdivs](https://www.squarebitstudios.com/squarebit-subdivs) |
 | Fix something that isn't working | [Limits and troubleshooting](troubleshooting.md) |
 | Script the plugin from Blueprint, Python or C++ | [API reference](api.md) |
 | Understand how it works inside | [Architecture](architecture.md) |
