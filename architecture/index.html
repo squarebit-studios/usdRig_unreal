@@ -1,0 +1,1782 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Pose and animate usdRig (RigExec) characters in Unreal Engine 5.8 with Control Rig and Sequencer">
+      
+      
+      
+        <link rel="canonical" href="https://squarebit-studios.github.io/usdRig_unreal/architecture/">
+      
+      
+        <link rel="prev" href="../api/">
+      
+      
+        <link rel="next" href="../plans/touchpose-remaining/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Architecture - RigExec for Unreal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=DM+Sans:300,300i,400,400i,700,700i%7CDM+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"DM Sans";--md-code-font:"DM Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="RigExec for Unreal" class="md-header__button md-logo" aria-label="RigExec for Unreal" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RigExec for Unreal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/squarebit-studios/usdRig_unreal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    squarebit-studios/usdRig_unreal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../building/" class="md-tabs__link">
+          
+  
+  
+  User guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../plans/touchpose-remaining/" class="md-tabs__link">
+          
+  
+  
+  Roadmap
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="RigExec for Unreal" class="md-nav__button md-logo" aria-label="RigExec for Unreal" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    RigExec for Unreal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/squarebit-studios/usdRig_unreal" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    squarebit-studios/usdRig_unreal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building and installing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rig-preparation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preparing a rig
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../editor-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limits and troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-short-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The short version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drawing-on-the-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawing on the GPU
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The actor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluating
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluating">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controls-follow-the-rig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls follow the rig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Undo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gizmo-placement-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gizmo placement cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ikfk-visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IK/FK visibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinates-and-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinates and units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hover-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hover picker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-marking-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The marking menu
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touch-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touch Pose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ikfk-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IK/FK matching
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plans/touchpose-remaining/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touch Pose: remaining work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-short-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The short version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drawing-on-the-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawing on the GPU
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The actor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluating
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluating">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controls-follow-the-rig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls follow the rig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Undo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gizmo-placement-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gizmo placement cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ikfk-visibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IK/FK visibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinates-and-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinates and units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The picker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hover-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The hover picker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-marking-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The marking menu
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touch-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Touch Pose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ikfk-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IK/FK matching
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/squarebit-studios/usdRig_unreal/edit/main/docs/architecture.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<p>How the RigExec plugin turns a baked usdRig character into something you can
+pose and key in Unreal.</p>
+<h2 id="the-short-version">The short version<a class="headerlink" href="#the-short-version" title="Permanent link">&para;</a></h2>
+<p>usdRig evaluates rigs with OpenExec inside USD. Unreal has no OpenExec, and
+its USD build is not the one usdRig compiles against. The plugin therefore
+does not evaluate the USD rig. It evaluates a <strong>baked program</strong>:</p>
+<ol>
+<li><code>rigExecBake --poseable</code> compiles the rig into a <code>.rigexec</code> file. This is a
+   binary image of the rig's step tables, poses, weights, geometry revisions
+   and (with <code>--poseable</code>) its property chains as programs.</li>
+<li><code>RigExecRuntimeReader</code> (from usdRig's <code>libs/rigExecRuntime</code>) replays that
+   program in plain C++17, with no USD. It takes new avar values with
+   <code>SetAvar</code>, re-runs with <code>Execute</code>, and hands back deformed points and
+   control frames.</li>
+<li>The plugin feeds Control Rig values in as avars and draws the points as
+   <code>UDynamicMeshComponent</code>s.</li>
+</ol>
+<p>The runtime is held to the USD evaluator point for point by usdRig's own tests
+(<code>testRigExecRuntimeLiveFace</code> and the binary round-trip tests). As a result,
+what you see in Unreal is what usdview shows for the same avars.</p>
+<h2 id="modules">Modules<a class="headerlink" href="#modules" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Plugins/RigExec/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── RigExec.uplugin                 depends on USDCore and ControlRig; Win64 only
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>└── Source/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    ├── RigExecRuntime/             Type=Runtime, LoadingPhase=Default
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    │   ├── Public/RigExecActor.h            ARigExecActor
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    │   ├── Public/RigExecComponent.h        URigExecComponent
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    │   └── Public/RigExecRuntimeLibrary.h   URigExecRuntimeLibrary (BP/Python helpers)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    ├── RigExecEditor/              Type=Editor, LoadingPhase=PostEngineInit
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    │   ├── RigExecEditorModule.cpp          tab, Tools menu entries and console commands
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    │   ├── RigExecPickerModel.*             the picker's buttons, clicks and painting, shared
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    │   ├── SRigExecPicker.*                 the docked picker panel (Slate)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    │   ├── RigExecHoverLayout.*             the hover picker's layout and gestures (no Slate)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    │   ├── RigExecHoverPicker.*             the hover picker: viewport overlay and input
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    │   ├── RigExecMarkingMenuModel.*        the marking menu's gesture, layout and menus (no Slate)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    │   ├── RigExecMarkingMenu.*             the marking menu: right-click routing, painting, commands
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    │   ├── RigExecDraw.h                    disc, ring and line helpers the overlays share
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    │   ├── RigExecTouchPose.*               Touch Pose
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    │   └── RigExecComponentDetails.*        the Rig component's render-path banner and toast
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    └── ThirdParty/RigExecLib/      Type=External
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        ├── include/                         rigExecRuntime/, rigExecBinary/, rigExecMath/ headers
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        ├── lib/Win64/                       rigExecRuntime.lib, rigExecBinary.lib
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        └── SOURCE.txt                       the usdRig commit the copy came from
+</code></pre></div>
+<p><strong>RigExecRuntime</strong> depends publicly on <code>Core</code>, <code>CoreUObject</code>, <code>Engine</code>,
+<code>UnrealUSDWrapper</code>, <code>ControlRig</code> and <code>RigVM</code>. It depends privately on
+<code>GeometryCore</code>, <code>GeometryFramework</code>, <code>USDUtilities</code>, <code>USDClasses</code>, <code>Json</code> and
+<code>RigExecLib</code>. In editor builds it also depends on <code>UnrealEd</code> and
+<code>ControlRigEditor</code>. It turns on RTTI and calls
+<code>UnrealUSDWrapper.CheckAndSetupUsdSdk</code> so that it can include <code>pxr/</code> headers
+the way Unreal's own USD modules do. It turns on exceptions because the
+runtime headers use the standard library freely.</p>
+<p><strong>RigExecEditor</strong> holds the pickers, Touch Pose and the Rig component's
+details customization. It depends on the runtime module for <code>ARigExecActor</code>
+and <code>URigExecComponent</code>, and on <code>LevelEditor</code> for the level viewports the
+hover picker draws over.</p>
+<p><strong>RigExecLib</strong> is an External module: headers plus prebuilt static libraries.
+The runtime headers are plain C++, so the plugin includes them between
+<code>THIRD_PARTY_INCLUDES_START</code>/<code>END</code>. It also pushes and pops Unreal's <code>check</code>
+and <code>verify</code> macros around them.</p>
+<h2 id="drawing-on-the-gpu">Drawing on the GPU<a class="headerlink" href="#drawing-on-the-gpu" title="Permanent link">&para;</a></h2>
+<p>By default each mesh is drawn by a <code>URigExecSkinComponent</code>, RigExec's GPU skin:</p>
+<ul>
+<li><strong>Build, once per load.</strong> It takes the Dynamic Mesh's topology, UVs, colours and material slots. Render
+  vertices are split per (point, UV element, polygon), which gives 142,922 on the biped. UVs stay seams, and
+  each polygon owns its colour, so Touch Pose borders are crisp. For each render vertex it also builds the list
+  of triangles around its point.</li>
+<li><strong>Per pose.</strong> The posed positions are uploaded once into a dynamic buffer and copied into the local vertex
+  factory's position buffer. A compute shader (<code>RigExecShaders</code> module, <code>Shaders/Private/RigExecNormals.usf</code>,
+  one thread per render vertex) writes 16-bit packed tangents, which are then copied into the factory's tangent
+  buffer:</li>
+<li>the normal is the area-weighted sum of face normals around the point, so it is smooth across UV seams;</li>
+<li>the tangent is the UV gradient over the vertex's own island, orthogonalized, with handedness in W.</li>
+</ul>
+<p>The CPU does no normal work and no full mesh re-upload.
+- <strong>Colours.</strong> The Touch Pose tint is uploaded only when it changes.
+- <strong>The Dynamic Meshes stay as the data.</strong> Picking, Touch Pose and a subdivision surface read them, and their
+  visibility says whether anything else draws them. They no longer draw themselves: main pass, depth, shadows
+  and ray tracing are off. Their edits are made silently (<code>bDeferChangeEvents</code>) while a skin draws them, and
+  with change events while they are hidden (a subdivision surface listening). A skin follows its mesh's
+  visibility, so Subdivs taking over hides it, and handing back shows it, caught up.</p>
+<p>Per pose on the biped, the mesh side takes about 5 ms on the GPU path against about 29 ms on the CPU fallback.
+The rig evaluation itself (16–22 ms in the runtime) is now the larger part.</p>
+<p><strong>CPU fallback.</strong> Where the GPU path cannot run (below Shader Model 5, or the shader not compiled for the
+platform), or with <strong>Draw On GPU</strong> off, the Dynamic Meshes draw themselves as before: CPU normals and a
+re-upload each pose. The component says so in <strong>Render Path</strong>, the editor shows a toast and a banner at the
+top of the Rig component's Details, and the log records it.</p>
+<p><strong>Motion vectors.</strong> The skin writes velocity for TSR and motion blur the same way Squarebit Subdivs does,
+with no custom shader code:</p>
+<ul>
+<li><strong>Its own vertex factory.</strong> <code>FRigExecSkinVertexFactory</code>, in the <code>RigExecShaders</code> module because vertex
+  factory types must exist before shaders compile, is the engine's local factory plus the GPU-skin pass-through
+  velocity path from <code>LocalVertexFactory.ush</code>.</li>
+<li><strong>Two position buffers.</strong> Each pose, the last pose is GPU-copied into a previous-positions buffer before the
+  new one is uploaded. The factory's pass-through loose parameters point at both, stamped with the game frame
+  (<code>GFrameCounter</code>).</li>
+<li><strong>No motion for a still pose.</strong> The shader uses the previous pose only in that frame, so a pose that hasn't
+  changed has no motion.</li>
+<li><strong>Velocity pass.</strong> <code>bAlwaysHasVelocity</code> puts the skin in the velocity pass even though its transform never
+  moves.</li>
+<li><strong>Setting.</strong> It is on with <strong>Motion Blur</strong> (RigExec &gt; Render).</li>
+</ul>
+<p><strong>Ray tracing.</strong> In a project with ray tracing enabled, each material section gets a ray-tracing geometry
+(BLAS). It is built once and refit in place after every pose upload, which is about ten times cheaper than a
+rebuild. The skin gives it to every visible view, so hardware ray-traced shadows, reflections and Lumen's
+hardware path see the posed character. The example project leaves ray tracing off, as Unreal does by default.</p>
+<h2 id="the-actor">The actor<a class="headerlink" href="#the-actor" title="Permanent link">&para;</a></h2>
+<p><code>ARigExecActor</code> is a plain root with two sibling components:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Class</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Rig</code></td>
+<td><code>URigExecComponent</code></td>
+<td>Owns the runtime reader and the meshes, and turns control values into avars</td>
+</tr>
+<tr>
+<td><code>Controls</code></td>
+<td><code>UControlRigComponent</code></td>
+<td>Runs the Control Rig asset that <code>build_control_rig.py</code> made, which is what Sequencer keys</td>
+</tr>
+</tbody>
+</table>
+<p>They are siblings rather than parent and child, which makes the tick order
+explicit. In <code>OnRegister</code> the <code>Rig</code> component adds the Control Rig
+component's tick as a prerequisite, and it ticks in <code>TG_PostUpdateWork</code>.
+Each frame the Control Rig evaluates first, then the rig reads its result.
+<code>bTickInEditor</code> is set, so posing works in the editor viewport without
+Play-In-Editor.</p>
+<h2 id="loading">Loading<a class="headerlink" href="#loading" title="Permanent link">&para;</a></h2>
+<p><code>URigExecComponent::Load()</code> (also called from <code>OnRegister</code> when the paths are
+set, because a saved level keeps the paths, not the meshes):</p>
+<ol>
+<li>Reads <code>RigExecFile</code> into memory and opens it with
+   <code>RigExecRuntimeReader::Open</code>. Then it selects the first baked frame and
+   runs once.</li>
+<li>Opens <code>StageFile</code> through <code>UnrealUSDWrapper::OpenStage</code>.</li>
+<li>For every point list in the runtime whose property is
+   <code>&lt;mesh&gt;.points</code>, it finds the <code>UsdGeomMesh</code> at that path and builds a
+   <code>FDynamicMesh3</code>:</li>
+<li>vertices are the <strong>rig's</strong> points, so vertex <em>i</em> is always the rig's
+     point <em>i</em></li>
+<li>faces are fan-triangulated from <code>faceVertexCounts</code>/<code>faceVertexIndices</code></li>
+<li>material slot 0 is the mesh's bound material, and each bound
+     <code>GeomSubset</code> adds a slot that overrides it for its faces</li>
+<li>per-vertex normals</li>
+<li>Creates one transient <code>UDynamicMeshComponent</code> per mesh. They are never
+   saved; they are rebuilt from the files on every load. Each material slot
+   gets a <code>UMaterialInstanceDynamic</code> of <code>SurfaceMaterial</code>, or of the engine's
+   <code>/RigExec/M_RigExecSurface</code> when that is empty (the engine's <code>BasicShapeMaterial</code> if the plugin's content is missing). The instance gets the
+   <code>UsdPreviewSurface</code>'s <code>diffuseColor</code>, <code>roughness</code> and <code>metallic</code>, set as
+   the <code>Color</code>/<code>BaseColor</code>, <code>Roughness</code> and <code>Metallic</code> parameters.</li>
+<li>Reads <code>ControlsFile</code>, if set (see <a href="#controls">Controls</a>).</li>
+</ol>
+<h2 id="evaluating">Evaluating<a class="headerlink" href="#evaluating" title="Permanent link">&para;</a></h2>
+<p>Each tick, <code>PullControls()</code>:</p>
+<ol>
+<li>Reads every control's value relative to its offset from the Control Rig
+   hierarchy.</li>
+<li>Converts it back to the rig's basis (see
+   <a href="#coordinates-and-units">Coordinates</a>). It decomposes the rotation into
+   Euler angles in the control's <code>rotationOrder</code>, picking the solution
+   nearest the last sent values so angles unwrap continuously. It applies
+   <code>avars:rotationSign</code> and divides translation by <code>avars:unitScaleFactor</code>.</li>
+<li>Sends each transform avar (<code>avars:tx</code> … <code>avars:sz</code>) that the control
+   carries, and each animation channel's value, through <code>SetAvar</code>. Only
+   values that changed by more than 1e-5 are sent.</li>
+<li>If anything changed, it calls <code>Evaluate()</code>. This runs <code>Execute</code> and writes
+   the new points into each dynamic mesh. It recomputes normals from the
+   deformed points, so skinning, blend shapes and every other deformer shade
+   correctly.</li>
+<li>Calls <code>PlaceControls()</code> (described below).</li>
+</ol>
+<p>When nothing changed, nothing is evaluated, so an idle character costs only
+the hierarchy reads.</p>
+<h3 id="controls-follow-the-rig">Controls follow the rig<a class="headerlink" href="#controls-follow-the-rig" title="Permanent link">&para;</a></h3>
+<p>After each evaluation the rig knows where every control actually is.
+<code>RigExecRuntimeReader::GetControlFrame</code> returns it, and IK, space switches
+and constraints all move controls. <code>PlaceControls</code> rewrites each control's
+<strong>offset</strong> so that its gizmo lands on that frame:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>offset = value⁻¹ · frame · parentFrame⁻¹
+</code></pre></div>
+<p>Controls are processed parents first. Helper transforms exported as nulls
+are placed directly. The animator's value is never touched, so keys stay
+what the animator set and only the drawing follows the rig.</p>
+<h3 id="undo">Undo<a class="headerlink" href="#undo" title="Permanent link">&para;</a></h3>
+<p>Unreal undoes a Control Rig edit by replaying control values, and Sequencer then re-evaluates its tracks. An
+undo can therefore restore state that this component never saw change, such as the pose after undoing an IK/FK
+switch. After every editor undo or redo (<code>FEditorDelegates::PostUndoRedo</code>), the component resyncs twice:
+straight away, and again on the next tick, after Sequencer has had its turn. A resync sends every control and
+channel value again whatever it held, re-poses the rig, re-places the gizmos and rewrites the Touch Pose
+colours, which is what scrubbing does. <code>RequestResync()</code> does the same on demand.</p>
+<h3 id="gizmo-placement-cost">Gizmo placement cost<a class="headerlink" href="#gizmo-placement-cost" title="Permanent link">&para;</a></h3>
+<p>All 606 gizmos are placed after every pose. The root's global is read once per placement, and each parent's
+global is taken from the rig's own frames (a placed parent sits on its frame) rather than from the hierarchy,
+which would recompute it right after it moved. On the biped this cut placement from about 21 ms to
+about 14 ms a pose.</p>
+<h3 id="ikfk-visibility">IK/FK visibility<a class="headerlink" href="#ikfk-visibility" title="Permanent link">&para;</a></h3>
+<p>A control with a <code>fade</code> in the controls file (a limb's IK or FK half) is
+shown only while its fade channel is above zero (inverted for the other
+half). This matches the display opacity usdview uses, so only the half that
+drives the limb is grabbable. During a hand-over both halves stay visible.</p>
+<h2 id="controls">Controls<a class="headerlink" href="#controls" title="Permanent link">&para;</a></h2>
+<p><code>Biped_controls.json</code> maps the Control Rig back to the rig. Each control
+entry gives the rig path and the Control Rig <code>element</code> name, its parent
+index, its rest <code>offset</code> (USD row-vector, asset space), <code>rotationOrder</code>,
+<code>rotationSign</code>, <code>unitScale</code>, which of <code>translate</code>/<code>rotate</code>/<code>scale</code> it
+carries, and its <code>defaults</code>. Each channel entry gives the owning control, the
+<code>attr</code> (for example <code>avars:ikfk</code>), and its default, range and labels. <code>limbs</code>
+describes each IK/FK limb for matching. See
+<a href="../rig-preparation/#the-controls-file">rig-preparation.md</a> for the full
+format.</p>
+<p>At load, each channel is tried against the runtime with <code>SetAvar</code>. Any it
+refuses is dropped, and the dropped channels are logged in one line. A mode
+switch the bake read as a constant is an example.</p>
+<h2 id="coordinates-and-units">Coordinates and units<a class="headerlink" href="#coordinates-and-units" title="Permanent link">&para;</a></h2>
+<p><strong>The Control Rig is in USD space.</strong> The controls file is marked <code>"space": "usd"</code> by <code>build_control_rig.py</code>,
+and the component refuses any other. It describes a Control Rig built without per-control conversion. Every control and null has its USD rest offset and value,
+and one root null (<code>"root"</code>, <code>UsdSpace</code>) holds the Y/Z swap. The component then:</p>
+<ul>
+<li>reads a control's local value straight as the avars matrix, with no swap;</li>
+<li>finds a rig frame's Control Rig global as <code>frame × assetToWorld</code> (centimetres), then multiplied by the
+  root's global from the hierarchy.</li>
+</ul>
+<p>The swap is a mirror (determinant −1), so every global under the root is mirrored and locals are not. The
+component therefore writes only locals: offsets, null transforms and <code>SwitchLimb</code>'s values
+(<code>SetControlLocalTransform</code>). That way no <code>FTransform</code> has to carry the mirror.</p>
+<p>Checked on the biped:
+- the root reproduces the swap to 1e-15;
+- every rest value equals its USD value exactly;
+- gizmos sit on the rig's frames and within 0.05 cm of the default level's;
+- an IK/FK switch moves the limb under 0.7 cm;
+- setting a control's global round-trips: a +5 cm world-up drag becomes +5 in the control's local Y, with
+  positive scale.</p>
+<p>usdRig works in USD's convention: Y-up, right-handed, row vectors, in the
+stage's <code>metersPerUnit</code>. Unreal is Z-up, left-handed, and in centimetres.</p>
+<ul>
+<li><strong>Axes.</strong> Swapping Y and Z converts in both directions. Points use
+  <code>UsdToUnreal::ConvertVector</code>. Control frames are never swapped one by one:
+  the Control Rig's <code>UsdSpace</code> root carries the swap for all of them.</li>
+<li><strong>Winding.</strong> USD faces wind counter-clockwise in a right-handed space. The
+  Y/Z swap mirrors them, so the same index order is the front face in Unreal,
+  and the index order is kept.</li>
+<li><strong>Units.</strong> Points go through <code>UsdToUnreal::ConvertVector</code> with the stage's
+  info. Frames and control translations scale by
+  <code>CentimetresPerUnit = metersPerUnit × 100</code>.</li>
+<li><strong>Placement.</strong> <code>assetToWorld</code> from the controls file carries the asset's
+  placement in the stage. Control frames are asset-space and are multiplied
+  by it, then by the <code>UsdSpace</code> root's global.</li>
+</ul>
+<h2 id="the-picker">The picker<a class="headerlink" href="#the-picker" title="Permanent link">&para;</a></h2>
+<p><code>SRigExecPicker</code> (the <strong>RigExec Picker</strong> tab) finds the <code>ARigExecActor</code> in
+the level. It reads the picker layout that <code>export_picker.py</code> wrote beside
+the controls file (<code>Biped_controls.json</code> → <code>Biped_picker.json</code>) and draws
+each panel with the button outlines usdview's picker paints. Those outlines
+are triangulated at export time, so Slate draws plain polygons.</p>
+<ul>
+<li>Buttons select their Control Rig controls through the Control Rig, so the
+  selection is the same one the viewport and Sequencer use.</li>
+<li>Attribute buttons write a channel. Space buttons call a space switch that
+  keeps the control in place. IK/FK buttons call <code>URigExecComponent::SwitchLimb</code>.</li>
+<li>Every action is a <code>FScopedTransaction</code> (one undo step) and is keyed like a
+  drag.</li>
+</ul>
+<p><code>FRigExecPickerModel</code> holds everything a picker view needs and nothing about
+how it is shown:
+- the loaded panels and which buttons are live;
+- which buttons show (each IK/FK pair shows only the limb's current half);
+- hit tests and marquees in panel units;
+- what a click does;
+- how a button paints, at any offset, scale and opacity.</p>
+<p>The docked picker and the hover picker are two views of that one model, so
+they cannot disagree about a button.</p>
+<p>See <a href="../editor-workflow/#the-picker">editor-workflow.md</a> for how to use it.</p>
+<h2 id="the-hover-picker">The hover picker<a class="headerlink" href="#the-hover-picker" title="Permanent link">&para;</a></h2>
+<p><code>FRigExecHoverPicker</code> ports usdRig's <code>pickerHoverUI.py</code>, and
+<code>RigExecHover::FLayout</code> (<code>RigExecHoverLayout.*</code>) ports <code>pickerHoverModel.py</code>
+line for line: the handle and knob geometry, the fit scale, the gesture
+arithmetic and the JSON layout. The design is usdview's:</p>
+<ul>
+<li><strong>Paint.</strong> A paint-only <code>SLeafWidget</code> (<code>SRigExecHoverOverlay</code>,
+  <code>HitTestInvisible</code>, volatile) sits on every level viewport through
+  <code>SLevelViewport::AddOverlayWidget</code>. The mouse passes through it, the way
+  usdview's overlay is mouse-transparent.</li>
+<li><strong>Input.</strong> An <code>IInputProcessor</code>, registered first in line at editor
+  start, decides which presses are the picker's. It claims those that land
+  on a button, a handle or the knob, and only over a hovered level viewport,
+  so menus and other windows in front keep their clicks. Everything else
+  goes on to Touch Pose and the viewport. Alt with any button but the left
+  is the camera's, and so is Alt anywhere but on a button.</li>
+<li><strong>Gestures.</strong> A press it claims starts a gesture (move, scale, fade, knob
+  or pick). The gesture takes the moves and the release until the button
+  comes up. A release lost outside the editor ends it on the next tick.</li>
+<li><strong>Hover.</strong> It is worked out every tick from the cursor. A move event
+  arrives before Slate updates which viewport is hovered.</li>
+<li><strong>The P key.</strong> The processor is installed whether the picker is shown or
+  not, so P works at any time. It claims P only over a level viewport with a
+  RigExec character in the level, and never into a text field.</li>
+</ul>
+<p>The overlay is added to every level viewport while the picker is on. It is
+re-added when a layout change remakes the viewports, and taken off when the
+picker is turned off. Touch Pose asks <code>FRigExecHoverPicker::IsOver</code> before
+it hovers or claims a press, so a picker button over the skin wins.</p>
+<h2 id="the-marking-menu">The marking menu<a class="headerlink" href="#the-marking-menu" title="Permanent link">&para;</a></h2>
+<p><code>RigExecMarking</code> (<code>RigExecMarkingMenuModel.*</code>) ports usdRig's
+<code>markingMenuModel.py</code>, and the Selection menu of <code>markingMenuDefs.py</code>, to
+C++. It holds:
+- the timings (150 ms to show, 200 ms tap, 250 ms dwell to unfold);
+- the 45° sectors centred on the eight directions, with a 12-unit dead zone;
+- the pinned-then-filled layout and the overflow column;
+- hidden-mid-flick versus greyed-when-read;
+- submenus with back circles;
+- the press, move, tick and release state machine.</p>
+<p>Time is passed in, so the thresholds are exact.</p>
+<p><code>FRigExecMarkingMenu</code> (<code>RigExecMarkingMenu.*</code>) is an <code>IInputProcessor</code>,
+registered first in line at editor start:
+- <strong>The press.</strong> It claims a right press when something under the cursor
+  names a control, checked in this order: a hover-picker
+  button (<code>FRigExecHoverPicker::ControlsAt</code>), a Touch Pose region
+  (<code>FRigExecTouchPose::ControlAt</code>), then a control shape's hit proxy (an
+  <code>AControlRigShapeActor</code> of a RigExec character's Control Rig). Anything
+  else goes on to the viewport.
+- <strong>Modal while open.</strong> Once open it takes every press, move and release
+  until the gesture ends, and the release of the press that ended it.
+- <strong>Precedence.</strong> A control under the cursor wins with any modifiers. With
+  none under it, a plain right-click with controls selected opens the menu
+  for them. Alt over empty space, or nothing selected, stays the camera's.
+- <strong>Painting.</strong> The menu paints in a hit-test-invisible overlay that sits
+  above every panel in the editor window the viewport is in
+  (<code>SWindow::AddOverlaySlot</code>). It is added when the menu is first drawn, so a
+  flick never adds one.
+  - <strong>Clamping.</strong> Label boxes and the overflow column are moved, not
+    resized, into that window's client area (within the monitor), and hit
+    tests use the same boxes.
+  - <strong>Why not a separate window?</strong> A separate per-pixel transparent window
+    was tried first. The RHI renderer does not composite one with the
+    desktop, so it drew black.
+- <strong>The selection.</strong> It is read as controls only: the animation channels
+  Control Rig sometimes selects alongside a control are dropped.</p>
+<p>The commands go through the Control Rig with undo:
+- <strong>Key</strong> sets each control and channel to its current value with
+  <code>EControlRigSetKey::Always</code>, which Sequencer's Control Rig track keys.
+- <strong>Reset to rest and Zero pose</strong> set initial values.
+- <strong>The FK/IK switch and Space</strong> use <code>URigExecComponent::SwitchLimb</code> and
+  <code>SwitchSpace</code>, with the limb and space found by <code>FindLimbSwitchFor</code> and
+  <code>FindSpaceChannel</code>.
+- <strong>Frame</strong> uses <code>MoveViewportCamerasToBox</code>.
+- <strong>Viewport menu</strong> uses <code>ILevelEditor::SummonLevelViewportContextMenu</code>.</p>
+<h2 id="touch-pose">Touch Pose<a class="headerlink" href="#touch-pose" title="Permanent link">&para;</a></h2>
+<p>The editor's Touch Pose mode (<code>RigExecTouchPose.cpp</code>) ports usdview's
+TouchPose plug-in (<code>usdRig/plugin/touchPose</code>) onto the dynamic meshes.</p>
+<ul>
+<li><strong>Regions.</strong> At load, <code>URigExecComponent::LoadTouchRegions</code> finds every
+  <code>RigExecTouchRegions</code> scope by type. It keeps each mesh's first layer
+  (ordered by <code>layerOrder</code>, then label, then path) and maps each USD face to
+  its region. Typed <code>rigExec:touch:*</code> properties win, and the older
+  <code>touchpose:*</code> ones are the fallback, as in <code>touchPoseModel.py</code>. The loader
+  already records which USD face each triangle came from, so a picked
+  triangle maps straight to a face and then a region.</li>
+<li><strong>Picking.</strong> A <code>FDynamicMeshAABBTree3</code> per touched mesh is built on the
+  posed skin. <code>Evaluate</code> marks it dirty and the next pick rebuilds it, so a
+  click lands on the skin as posed. Unpainted skin still occludes what is
+  behind it.</li>
+<li><strong>Input.</strong> An <code>IInputProcessor</code>, registered only while the mode is on,
+  ticks hover from the cursor (skipped while a mouse button is held). It
+  never takes a click a manipulator could have. With the new TRS gizmos
+  (<code>UEditorInteractiveGizmoManager::UsesNewTRSGizmos</code>), it asks the level
+  editor's <code>UTransformGizmo</code> through <code>CanBeginClickDragSequence</code>, the test
+  its input router runs on a press, because that gizmo does its own ray test
+  and draws no hit proxies. It also checks the legacy widget
+  (<code>GetCurrentWidgetAxis()</code>) and scans the hit-proxy map 6 px around the
+  cursor for <code>HWidgetAxis</code> or an <code>AControlRigShapeActor</code>. It then takes the click
+  only when the hit proxy at the pixel is the character itself.</li>
+<li><strong>Suspension.</strong> Each tick, a character counts as busy while the left button
+  is held (excluding Touch Pose's own click) or within 0.35 s of its last
+  pose (<code>URigExecComponent::GetLastPoseTime</code>, stamped in <code>Evaluate</code>).
+  <code>SetTouchSuspended</code> clears the tint without forgetting the highlight;
+  resuming writes it back.
+  It selects through <code>UControlRig::SelectControl</code> in a transaction (Shift
+  toggles, Ctrl removes), and swallows the matching release.</li>
+<li><strong>Highlight.</strong> The tint is written into the drawn meshes' vertex colours.
+  Each face corner has its own colour element, untinted at alpha 0, and only
+  the faces of regions whose state changed are rewritten (an attribute edit
+  with the <code>VertexColors</code> flag). The surface material blends the colour in by
+  its alpha at usdview's 30% (<code>HIGHLIGHT_OPACITY</code>), with a little emissive so a
+  lit region reads in shadow. Because the tint lives on the mesh, it moves
+  with the pose at no cost and reaches anything else that draws the meshes,
+  a subdivision surface included. Colours follow
+  <code>touchPoseModel.py</code>: hover is the region's palette entry
+  (<code>touchpose:hilight</code> indexes <code>rigExec:touch:palette</code>) scaled to full value;
+  lead and selected are the scope's <code>touchpose:leadColor</code>/<code>selectedColor</code>
+  (green and grey by default) scaled to 0.95 and 0.62.</li>
+</ul>
+<h2 id="ikfk-matching">IK/FK matching<a class="headerlink" href="#ikfk-matching" title="Permanent link">&para;</a></h2>
+<p><code>SwitchLimb</code> hands a limb to its other half without moving it:</p>
+<ul>
+<li><strong>To FK:</strong> each FK control is put on <code>fkOffset × joint</code>, root to end,
+  evaluating after each one so children follow.</li>
+<li><strong>To IK:</strong> the IK control is placed so the effector lands on the end joint
+  (<code>effectorOffset⁻¹ × endJoint</code>). Any roll stack between the control and
+  the effector is carried as it is. The pole goes onto the bend plane, at the
+  rest distance, on the side the middle joint bends toward. A straight limb
+  keeps the pole's direction.</li>
+<li>Then the switch channel flips. The offsets are measured at rest by
+  <code>export_controls.py</code>, using usdRig's own <code>ikfkMatch</code> model.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: API reference">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                API reference
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../plans/touchpose-remaining/" class="md-footer__link md-footer__link--next" aria-label="Next: Touch Pose: remaining work">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Touch Pose: remaining work
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; Squarebit Studios
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/squarebit-studios/usdRig_unreal" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.squarebitstudios.com" target="_blank" rel="noopener" title="www.squarebitstudios.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2m-5.15 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56M14.34 14H9.66c-.1-.66-.16-1.32-.16-2s.06-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2M12 19.96c-.83-1.2-1.5-2.53-1.91-3.96h3.82c-.41 1.43-1.08 2.76-1.91 3.96M8 8H5.08A7.92 7.92 0 0 1 9.4 4.44C8.8 5.55 8.35 6.75 8 8m-2.92 8H8c.35 1.25.8 2.45 1.4 3.56A8 8 0 0 1 5.08 16m-.82-2C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2M12 4.03c.83 1.2 1.5 2.54 1.91 3.97h-3.82c.41-1.43 1.08-2.77 1.91-3.97M18.92 8h-2.95a15.7 15.7 0 0 0-1.38-3.56c1.84.63 3.37 1.9 4.33 3.56M12 2C6.47 2 2 6.5 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.instant", "navigation.footer", "content.action.edit", "toc.follow", "content.code.copy", "content.code.annotate", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
