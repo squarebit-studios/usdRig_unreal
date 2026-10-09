@@ -1,0 +1,34 @@
+name: Docs
+
+# Builds the MkDocs site from docs/ and publishes it to the gh-pages branch,
+# which GitHub Pages serves at https://squarebit-studios.github.io/usdRig_unreal/.
+# Needs no engine: it runs on a free GitHub-hosted Ubuntu runner.
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'docs/**', 'mkdocs.yml', '.github/workflows/docs.yml' ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # mkdocs gh-deploy pushes the built site to gh-pages
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs
+        run: pip install mkdocs-material
+
+      - name: Build and publish to gh-pages
+        run: mkdocs gh-deploy --strict --force --no-history

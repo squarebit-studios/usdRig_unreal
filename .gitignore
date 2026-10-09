@@ -16,3 +16,4 @@ DerivedDataCache/
 # Python.
 __pycache__/
 *.pyc
+site/

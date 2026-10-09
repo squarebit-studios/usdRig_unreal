@@ -1,0 +1,68 @@
+site_name: RigExec for Unreal
+site_description: Pose and animate usdRig (RigExec) characters in Unreal Engine 5.8 with Control Rig and Sequencer
+site_url: https://squarebit-studios.github.io/usdRig_unreal/
+repo_url: https://github.com/squarebit-studios/usdRig_unreal
+repo_name: squarebit-studios/usdRig_unreal
+edit_uri: edit/main/docs/
+
+# Squarebit Subdivs is a separate product, used here only for local testing:
+# its notes stay in the repository but not on the site.
+exclude_docs: |
+  subdivision.md
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.instant
+    - content.code.copy
+    - content.code.annotate
+    - search.highlight
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - User guide:
+    - Building and installing: building.md
+    - Preparing a rig: rig-preparation.md
+    - Working in the editor: editor-workflow.md
+    - Limits and troubleshooting: troubleshooting.md
+  - Reference:
+    - API reference: api.md
+    - Architecture: architecture.md
+  - Roadmap:
+    - "Touch Pose: remaining work": plans/touchpose-remaining.md

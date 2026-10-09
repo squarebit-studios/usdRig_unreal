@@ -1,5 +1,7 @@
 # usdRig_unreal
 
+**Documentation: <https://squarebit-studios.github.io/usdRig_unreal/>**
+
 The RigExec plugin for Unreal Engine 5.8. It poses a [usdRig](../usdRig)
 (RigExec) character inside the Unreal Editor and animates it with Control Rig
 and Sequencer.

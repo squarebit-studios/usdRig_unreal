@@ -303,8 +303,8 @@ layer (by `rigExec:touch:layerOrder`), as usdview opens it. On the biped
 that means 219 regions over the body and both eyes. A region whose control
 is a rig helper (a Control Rig null) is skipped and logged. The highlight is a tint in the meshes' vertex colours, blended by the
 surface material `/RigExec/M_RigExecSurface` (made by
-`Tools/make_materials.py`). It therefore shows on a subdivided character too
-(see [subdivision.md](subdivision.md)). A `SurfaceMaterial` of your own must
+`Tools/make_materials.py`). It therefore shows on a subdivided character too.
+A `SurfaceMaterial` of your own must
 blend the vertex colour in the same way for the highlight to show.
 
 ## Scripting and testing

@@ -33,7 +33,7 @@ editor too.
 | --- | --- | --- |
 | `RigExecFile` | `FFilePath` | A poseable `.rigexec`. Relative paths are relative to the project directory |
 | `StageFile` | `FFilePath` | The USD stage the rig was baked from, read for mesh topology and materials |
-| `SurfaceMaterial` | `UMaterialInterface*` | Parent of each mesh material. It receives `Color`/`BaseColor`, `Roughness` and `Metallic` parameters. Empty means `/RigExec/M_RigExecSurface`, which also blends the vertex colour in by its alpha (the Touch Pose tint, see [subdivision.md](subdivision.md#your-own-materials)) |
+| `SurfaceMaterial` | `UMaterialInterface*` | Parent of each mesh material. It receives `Color`/`BaseColor`, `Roughness` and `Metallic` parameters. Empty means `/RigExec/M_RigExecSurface`, which also blends the vertex colour in by its alpha (the Touch Pose tint, see [Touch Pose](editor-workflow.md#touch-pose)) |
 | `ControlsFile` | `FFilePath` | The controls description (after `build_control_rig.py`). Optional: without it, nothing maps the Control Rig onto the rig |
 | `ControlRig` | `UControlRigComponent*` | The Control Rig that poses the rig. Empty means the owner's first one |
 

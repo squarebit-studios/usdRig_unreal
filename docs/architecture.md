@@ -425,8 +425,8 @@ TouchPose plug-in (`usdRig/plugin/touchPose`) onto the dynamic meshes.
   with the `VertexColors` flag). The surface material blends the colour in by
   its alpha at usdview's 30% (`HIGHLIGHT_OPACITY`), with a little emissive so a
   lit region reads in shadow. Because the tint lives on the mesh, it moves
-  with the pose at no cost and reaches a subdivision surface that draws the
-  meshes (see [subdivision.md](subdivision.md)). Colours follow
+  with the pose at no cost and reaches anything else that draws the meshes,
+  a subdivision surface included. Colours follow
   `touchPoseModel.py`: hover is the region's palette entry
   (`touchpose:hilight` indexes `rigExec:touch:palette`) scaled to full value;
   lead and selected are the scope's `touchpose:leadColor`/`selectedColor`
